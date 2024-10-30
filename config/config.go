@@ -1,6 +1,11 @@
 package config
 
-import "time"
+import (
+	"log"
+	"time"
+
+	"github.com/joeshaw/envdecode"
+)
 
 type Conf struct {
 	Server ConfServer
@@ -12,14 +17,32 @@ type ConfServer struct {
 	TimeoutRead  time.Duration `env:"SERVER_TIMEOUT_READ,required"`
 	TimeoutWrite time.Duration `env:"SERVER_TIMEOUT_WRITE,required"`
 	TimeoutIdle  time.Duration `env:"SERVER_TIMEOUT_IDLE,required"`
-	Debug        bool          `env:"SERVER_DEBUG, required"`
+	Debug        bool          `env:"SERVER_DEBUG,required"`
 }
 
 type ConfDB struct {
-	Host     string `env:"DB_HOST,required"`
-	Port     int    `env:"DB_PORT,required"`
-	Username string `env:"DB_USER,required"`
-	Password string `env:"DB_PASS, required"`
-	DBName   string `env:"DB_NAME, required"`
-	Debug    bool   `env:"DB_DEFUG, requierd"`
+	Host     string `env:"DB_HOST"`
+	Port     int    `env:"DB_PORT"`
+	Username string `env:"DB_USER"`
+	Password string `env:"DB_PASS"`
+	DBName   string `env:"DB_NAME"`
+	Debug    bool   `env:"DB_DEBUG"`
+}
+
+func New() *Conf {
+	var c Conf
+	if err := envdecode.StrictDecode(&c); err != nil {
+		log.Fatalf("Failed to decode: %v", err)
+	}
+
+	return &c
+}
+
+func NewDB() *ConfDB {
+	var c ConfDB
+	if err := envdecode.StrictDecode(&c); err != nil {
+		log.Fatalf("Failed to decode: %v", err)
+	}
+
+	return &c
 }

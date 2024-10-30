@@ -8,12 +8,13 @@ import (
 	"os"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
+	"github.com/leondore/expense-tracker-api/config"
 	"github.com/pressly/goose/v3"
 )
 
 const (
-	dialect  = "pgx"
-	dbString = "postgres://db_admin:password@localhost:6543/exptrack_db?sslmode=disable"
+	dialect     = "pgx"
+	dbFmtString = "host=%s user=%s password=%s dbname=%s port=%d sslmode=disable"
 )
 
 var (
@@ -33,7 +34,10 @@ func main() {
 
 	command := args[0]
 
-	db, err := goose.OpenDBWithDriver(dialect, dbString)
+	c := config.NewDB()
+	dbConnString := fmt.Sprintf(dbFmtString, c.Host, c.Username, c.Password, c.DBName, c.Port)
+
+	db, err := goose.OpenDBWithDriver(dialect, dbConnString)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
