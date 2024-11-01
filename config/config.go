@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/joeshaw/envdecode"
+	"github.com/joho/godotenv"
 )
 
 type Conf struct {
@@ -27,6 +28,10 @@ type ConfDB struct {
 	Password string `env:"DB_PASS"`
 	DBName   string `env:"DB_NAME"`
 	Debug    bool   `env:"DB_DEBUG"`
+}
+
+func LoadEnv() error {
+	return godotenv.Load()
 }
 
 func New() *Conf {
