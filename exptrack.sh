@@ -17,6 +17,10 @@ case "$1" in
         echo "Reverting migrations..."
         goose -dir ./migrations postgres "postgres://db_admin:password@localhost:6543/exptrack_db?sslmode=disable" down
         ;;
+    migrate-create)
+        echo "Creating migration..."
+        goose -dir ./migrations create "$2" sql
+        ;;
     *)
         echo "Usage: $0 {start|stop|migrate-up|migrate-down}"
         exit 1
