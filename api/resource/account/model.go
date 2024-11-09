@@ -12,3 +12,12 @@ type DTO struct {
 	AccountNumber string            `json:"account_number"`
 	Institution   string            `json:"institution"`
 }
+
+type Form struct {
+	Name          string `json:"name"`
+	Currency      int    `json:"currency"`
+	Description   string `json:"description"`
+	CategoryId    int    `json:"category_id"`
+	AccountNumber string `json:"account_number"`
+	InstitutionId int    `json:"institution"`
+}

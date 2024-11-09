@@ -2,8 +2,8 @@ package router
 
 import (
 	"github.com/go-chi/chi/v5"
-	"github.com/leondore/expense-tracker-api/cmd/api/resource/account"
-	"github.com/leondore/expense-tracker-api/cmd/api/resource/health"
+	"github.com/leondore/expense-tracker-api/api/resource/account"
+	"github.com/leondore/expense-tracker-api/api/resource/health"
 )
 
 func New() *chi.Mux {
