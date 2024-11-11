@@ -1,11 +1,11 @@
 -- +goose Up
 -- +goose StatementBegin
-CREATE TYPE account_category AS ENUM ('cash', 'bank', 'creditCard', 'debitCard', 'investment', 'loan', 'other');
+CREATE TYPE account_category_options AS ENUM ('cash', 'bank', 'creditCard', 'debitCard', 'investment', 'loan', 'other');
 
 CREATE TABLE IF NOT EXISTS account_categories
 (
   id SMALLSERIAL PRIMARY KEY,
-  category account_category NOT NULL UNIQUE,
+  category account_category_options NOT NULL UNIQUE,
   description VARCHAR(255)
 );
 
@@ -33,5 +33,5 @@ CREATE TABLE IF NOT EXISTS accounts
 -- +goose StatementBegin
 DROP TABLE IF EXISTS accounts;
 DROP TABLE IF EXISTS account_categories;
-DROP TYPE IF EXISTS account_category;
+DROP TYPE IF EXISTS account_category_options;
 -- +goose StatementEnd

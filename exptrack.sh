@@ -11,15 +11,19 @@ case "$1" in
         ;;
     migrate-up)
         echo "Running migrations..."
-        goose -dir ./migrations postgres "postgres://db_admin:password@localhost:6543/exptrack_db?sslmode=disable" up
+        goose -dir ./database/schema postgres "postgres://db_admin:password@localhost:6543/exptrack_db?sslmode=disable" up
         ;;
     migrate-down)
         echo "Reverting migrations..."
-        goose -dir ./migrations postgres "postgres://db_admin:password@localhost:6543/exptrack_db?sslmode=disable" down
+        goose -dir ./database/schema postgres "postgres://db_admin:password@localhost:6543/exptrack_db?sslmode=disable" down
         ;;
     migrate-create)
         echo "Creating migration..."
-        goose -dir ./migrations create "$2" sql
+        goose -dir ./database/schema create "$2" sql
+        ;;
+    db-generate)
+        echo "Generating database code..."
+        sqlc generate
         ;;
     *)
         echo "Usage: $0 {start|stop|migrate-up|migrate-down}"
