@@ -1,8 +1,12 @@
 package account
 
-import "net/http"
+import (
+	"net/http"
+)
 
-type API struct{}
+type API struct {
+	Repository *Repository
+}
 
 // List godoc
 //
