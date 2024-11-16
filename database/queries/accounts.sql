@@ -5,10 +5,10 @@ SELECT
   a.balance,
   a.description,
   a.account_number,
-  ac.id,
+  ac.id AS category_id,
   ac.category,
-  i.name,
-  c.code
+  i.name AS institution,
+  c.code AS currency
 FROM accounts AS a
 JOIN account_categories AS ac ON a.category_id = ac.id
 JOIN institutions AS i ON a.institution_id = i.id
@@ -24,10 +24,10 @@ SELECT
   a.balance,
   a.description,
   a.account_number,
-  ac.id,
+  ac.id AS category_id,
   ac.category,
-  i.name,
-  c.code
+  i.name AS institution,
+  c.code AS currency
 FROM accounts AS a
 JOIN account_categories AS ac ON a.category_id = ac.id
 JOIN institutions AS i ON a.institution_id = i.id

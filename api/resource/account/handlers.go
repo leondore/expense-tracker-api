@@ -2,10 +2,18 @@ package account
 
 import (
 	"net/http"
+
+	database "github.com/leondore/expense-tracker-api/database/gen"
 )
 
 type API struct {
-	Repository *Repository
+	repository *Repository
+}
+
+func NewAPI(db *database.Queries) *API {
+	return &API{
+		repository: NewRepository(db),
+	}
 }
 
 // List godoc

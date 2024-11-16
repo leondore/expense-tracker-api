@@ -37,8 +37,8 @@ func (e *AccountCategoryOptions) Scan(src interface{}) error {
 }
 
 type NullAccountCategoryOptions struct {
-	AccountCategoryOptions AccountCategoryOptions
-	Valid                  bool // Valid is true if AccountCategoryOptions is not NULL
+	AccountCategoryOptions AccountCategoryOptions `json:"account_category_options"`
+	Valid                  bool                   `json:"valid"` // Valid is true if AccountCategoryOptions is not NULL
 }
 
 // Scan implements the Scanner interface.
@@ -60,67 +60,67 @@ func (ns NullAccountCategoryOptions) Value() (driver.Value, error) {
 }
 
 type Account struct {
-	ID            uuid.UUID
-	CreatedAt     sql.NullTime
-	UpdatedAt     sql.NullTime
-	Name          string
-	Balance       string
-	Description   sql.NullString
-	AccountNumber sql.NullString
-	CategoryID    int16
-	InstitutionID sql.NullInt16
-	UserID        uuid.UUID
-	CurrencyID    int16
+	ID            uuid.UUID      `json:"id"`
+	CreatedAt     sql.NullTime   `json:"created_at"`
+	UpdatedAt     sql.NullTime   `json:"updated_at"`
+	Name          string         `json:"name"`
+	Balance       string         `json:"balance"`
+	Description   sql.NullString `json:"description"`
+	AccountNumber sql.NullString `json:"account_number"`
+	CategoryID    int16          `json:"category_id"`
+	InstitutionID sql.NullInt16  `json:"institution_id"`
+	UserID        uuid.UUID      `json:"user_id"`
+	CurrencyID    int16          `json:"currency_id"`
 }
 
 type AccountCategory struct {
-	ID          int16
-	Category    AccountCategoryOptions
-	Description sql.NullString
+	ID          int16                  `json:"id"`
+	Category    AccountCategoryOptions `json:"category"`
+	Description sql.NullString         `json:"description"`
 }
 
 type Attachment struct {
-	ID        uuid.UUID
-	CreatedAt sql.NullTime
-	Name      string
-	UserID    uuid.UUID
+	ID        uuid.UUID    `json:"id"`
+	CreatedAt sql.NullTime `json:"created_at"`
+	Name      string       `json:"name"`
+	UserID    uuid.UUID    `json:"user_id"`
 }
 
 type Country struct {
-	ID   int16
-	Name string
-	Code string
+	ID   int16  `json:"id"`
+	Name string `json:"name"`
+	Code string `json:"code"`
 }
 
 type Currency struct {
-	ID     int16
-	Name   string
-	Code   string
-	Symbol string
+	ID     int16  `json:"id"`
+	Name   string `json:"name"`
+	Code   string `json:"code"`
+	Symbol string `json:"symbol"`
 }
 
 type Institution struct {
-	ID        int16
-	CreatedAt sql.NullTime
-	UpdatedAt sql.NullTime
-	Name      string
-	Code      sql.NullString
-	CountryID int16
-	LogoID    uuid.NullUUID
-	UserID    uuid.UUID
+	ID        int16          `json:"id"`
+	CreatedAt sql.NullTime   `json:"created_at"`
+	UpdatedAt sql.NullTime   `json:"updated_at"`
+	Name      string         `json:"name"`
+	Code      sql.NullString `json:"code"`
+	CountryID int16          `json:"country_id"`
+	LogoID    uuid.NullUUID  `json:"logo_id"`
+	UserID    uuid.UUID      `json:"user_id"`
 }
 
 type Role struct {
-	ID   int16
-	Role string
+	ID   int16  `json:"id"`
+	Role string `json:"role"`
 }
 
 type User struct {
-	ID            uuid.UUID
-	CreatedAt     sql.NullTime
-	UpdatedAt     sql.NullTime
-	Email         string
-	Password      string
-	RoleID        int16
-	EmailVerified sql.NullBool
+	ID            uuid.UUID    `json:"id"`
+	CreatedAt     sql.NullTime `json:"created_at"`
+	UpdatedAt     sql.NullTime `json:"updated_at"`
+	Email         string       `json:"email"`
+	Password      string       `json:"password"`
+	RoleID        int16        `json:"role_id"`
+	EmailVerified sql.NullBool `json:"email_verified"`
 }

@@ -19,18 +19,18 @@ RETURNING id, name
 `
 
 type CreateAccountParams struct {
-	Name          string
-	Description   sql.NullString
-	AccountNumber sql.NullString
-	CategoryID    int16
-	InstitutionID sql.NullInt16
-	UserID        uuid.UUID
-	CurrencyID    int16
+	Name          string         `json:"name"`
+	Description   sql.NullString `json:"description"`
+	AccountNumber sql.NullString `json:"account_number"`
+	CategoryID    int16          `json:"category_id"`
+	InstitutionID sql.NullInt16  `json:"institution_id"`
+	UserID        uuid.UUID      `json:"user_id"`
+	CurrencyID    int16          `json:"currency_id"`
 }
 
 type CreateAccountRow struct {
-	ID   uuid.UUID
-	Name string
+	ID   uuid.UUID `json:"id"`
+	Name string    `json:"name"`
 }
 
 func (q *Queries) CreateAccount(ctx context.Context, arg CreateAccountParams) (CreateAccountRow, error) {
@@ -56,8 +56,8 @@ AND user_id = $2
 `
 
 type DeleteAccountParams struct {
-	ID     uuid.UUID
-	UserID uuid.UUID
+	ID     uuid.UUID `json:"id"`
+	UserID uuid.UUID `json:"user_id"`
 }
 
 func (q *Queries) DeleteAccount(ctx context.Context, arg DeleteAccountParams) error {
@@ -72,10 +72,10 @@ SELECT
   a.balance,
   a.description,
   a.account_number,
-  ac.id,
+  ac.id AS category_id,
   ac.category,
-  i.name,
-  c.code
+  i.name AS institution,
+  c.code AS currency
 FROM accounts AS a
 JOIN account_categories AS ac ON a.category_id = ac.id
 JOIN institutions AS i ON a.institution_id = i.id
@@ -85,15 +85,15 @@ ORDER BY ac.id, a.name
 `
 
 type ListAccountsRow struct {
-	ID            uuid.UUID
-	Name          string
-	Balance       string
-	Description   sql.NullString
-	AccountNumber sql.NullString
-	ID_2          int16
-	Category      AccountCategoryOptions
-	Name_2        string
-	Code          string
+	ID            uuid.UUID              `json:"id"`
+	Name          string                 `json:"name"`
+	Balance       string                 `json:"balance"`
+	Description   sql.NullString         `json:"description"`
+	AccountNumber sql.NullString         `json:"account_number"`
+	CategoryID    int16                  `json:"category_id"`
+	Category      AccountCategoryOptions `json:"category"`
+	Institution   string                 `json:"institution"`
+	Currency      string                 `json:"currency"`
 }
 
 func (q *Queries) ListAccounts(ctx context.Context, userID uuid.UUID) ([]ListAccountsRow, error) {
@@ -111,10 +111,10 @@ func (q *Queries) ListAccounts(ctx context.Context, userID uuid.UUID) ([]ListAcc
 			&i.Balance,
 			&i.Description,
 			&i.AccountNumber,
-			&i.ID_2,
+			&i.CategoryID,
 			&i.Category,
-			&i.Name_2,
-			&i.Code,
+			&i.Institution,
+			&i.Currency,
 		); err != nil {
 			return nil, err
 		}
@@ -137,10 +137,10 @@ SELECT
   a.balance,
   a.description,
   a.account_number,
-  ac.id,
+  ac.id AS category_id,
   ac.category,
-  i.name,
-  c.code
+  i.name AS institution,
+  c.code AS currency
 FROM accounts AS a
 JOIN account_categories AS ac ON a.category_id = ac.id
 JOIN institutions AS i ON a.institution_id = i.id
@@ -150,20 +150,20 @@ AND a.user_id = $2
 `
 
 type ReadAccountParams struct {
-	ID     uuid.UUID
-	UserID uuid.UUID
+	ID     uuid.UUID `json:"id"`
+	UserID uuid.UUID `json:"user_id"`
 }
 
 type ReadAccountRow struct {
-	ID            uuid.UUID
-	Name          string
-	Balance       string
-	Description   sql.NullString
-	AccountNumber sql.NullString
-	ID_2          int16
-	Category      AccountCategoryOptions
-	Name_2        string
-	Code          string
+	ID            uuid.UUID              `json:"id"`
+	Name          string                 `json:"name"`
+	Balance       string                 `json:"balance"`
+	Description   sql.NullString         `json:"description"`
+	AccountNumber sql.NullString         `json:"account_number"`
+	CategoryID    int16                  `json:"category_id"`
+	Category      AccountCategoryOptions `json:"category"`
+	Institution   string                 `json:"institution"`
+	Currency      string                 `json:"currency"`
 }
 
 func (q *Queries) ReadAccount(ctx context.Context, arg ReadAccountParams) (ReadAccountRow, error) {
@@ -175,10 +175,10 @@ func (q *Queries) ReadAccount(ctx context.Context, arg ReadAccountParams) (ReadA
 		&i.Balance,
 		&i.Description,
 		&i.AccountNumber,
-		&i.ID_2,
+		&i.CategoryID,
 		&i.Category,
-		&i.Name_2,
-		&i.Code,
+		&i.Institution,
+		&i.Currency,
 	)
 	return i, err
 }
@@ -199,19 +199,19 @@ RETURNING id, name
 `
 
 type UpdateAccountParams struct {
-	ID            uuid.UUID
-	Name          string
-	Description   sql.NullString
-	AccountNumber sql.NullString
-	CategoryID    int16
-	InstitutionID sql.NullInt16
-	CurrencyID    int16
-	UserID        uuid.UUID
+	ID            uuid.UUID      `json:"id"`
+	Name          string         `json:"name"`
+	Description   sql.NullString `json:"description"`
+	AccountNumber sql.NullString `json:"account_number"`
+	CategoryID    int16          `json:"category_id"`
+	InstitutionID sql.NullInt16  `json:"institution_id"`
+	CurrencyID    int16          `json:"currency_id"`
+	UserID        uuid.UUID      `json:"user_id"`
 }
 
 type UpdateAccountRow struct {
-	ID   uuid.UUID
-	Name string
+	ID   uuid.UUID `json:"id"`
+	Name string    `json:"name"`
 }
 
 func (q *Queries) UpdateAccount(ctx context.Context, arg UpdateAccountParams) (UpdateAccountRow, error) {
