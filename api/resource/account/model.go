@@ -29,12 +29,17 @@ type Form struct {
 }
 
 func NewDTO(row database.ListAccountsRow) *DTO {
+	balance, err := types.CurrencyFromString(row.Balance)
+	if err != nil {
+		return nil
+	}
+
 	return &DTO{
 		Id:            row.ID,
 		Name:          row.Name,
-		Balance:       types.Currency(row.Balance),
-		Description:   &row.Description.String,
-		AccountNumber: &row.AccountNumber.String,
+		Balance:       balance,
+		Description:   types.NullableStringtoPtr(row.Description),
+		AccountNumber: types.NullableStringtoPtr(row.AccountNumber),
 		CategoryID:    int(row.CategoryID),
 		Category:      row.Category,
 		Institution:   row.Institution,
