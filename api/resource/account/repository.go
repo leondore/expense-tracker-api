@@ -3,7 +3,8 @@ package account
 import (
 	"context"
 
-	"github.com/google/uuid"
+	e "github.com/leondore/expense-tracker-api/api/resource/common/err"
+	"github.com/leondore/expense-tracker-api/api/resource/common/utils"
 	database "github.com/leondore/expense-tracker-api/database/gen"
 )
 
@@ -17,10 +18,10 @@ func NewRepository(db *database.Queries) *Repository {
 	}
 }
 
-func (r *Repository) List(ctx context.Context, userId string) ([]DTO, error) {
-	uuid, err := uuid.Parse(userId)
+func (r *Repository) List(ctx context.Context) ([]database.ListAccountsRow, error) {
+	uuid, err := utils.UserIDFromContext(ctx)
 	if err != nil {
-		return nil, err
+		return nil, e.NewErrUserID(err)
 	}
 
 	return r.db.ListAccounts(ctx, uuid)

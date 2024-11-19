@@ -1,4 +1,4 @@
-package currency
+package types
 
 type Currency uint64
 
