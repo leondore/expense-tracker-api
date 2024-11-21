@@ -1,6 +1,8 @@
 package account
 
 import (
+	"database/sql"
+
 	"github.com/google/uuid"
 	"github.com/leondore/expense-tracker-api/api/resource/common/types"
 	database "github.com/leondore/expense-tracker-api/database/gen"
@@ -28,21 +30,38 @@ type Form struct {
 	CurrencyID    int       `json:"currency"`
 }
 
-func NewDTO(row database.ListAccountsRow) *DTO {
-	balance, err := types.CurrencyFromString(row.Balance)
-	if err != nil {
-		return nil
-	}
-
+func (d *DTO) FromModel(row database.ListAccountsRow) *DTO {
 	return &DTO{
 		Id:            row.ID,
 		Name:          row.Name,
-		Balance:       balance,
+		Balance:       types.CurrencyFromString(row.Balance),
 		Description:   types.NullableStringtoPtr(row.Description),
 		AccountNumber: types.NullableStringtoPtr(row.AccountNumber),
 		CategoryID:    int(row.CategoryID),
 		Category:      row.Category,
 		Institution:   row.Institution,
 		Currency:      row.Currency,
+	}
+}
+
+type CreateAccountParams struct {
+	Name          string         `json:"name"`
+	Description   sql.NullString `json:"description"`
+	AccountNumber sql.NullString `json:"account_number"`
+	CategoryID    int16          `json:"category_id"`
+	InstitutionID sql.NullInt16  `json:"institution_id"`
+	UserID        uuid.UUID      `json:"user_id"`
+	CurrencyID    int16          `json:"currency_id"`
+}
+
+func (f *Form) ToModel() *database.CreateAccountParams {
+	return &database.CreateAccountParams{
+		Name:          f.Name,
+		Description:   types.PtrToNullableString(f.Description),
+		AccountNumber: types.PtrToNullableString(f.AccountNumber),
+		CategoryID:    int16(f.CategoryID),
+		InstitutionID: types.PtrToNullableInt16(f.InstitutionID),
+		UserID:        f.UserID,
+		CurrencyID:    int16(f.CurrencyID),
 	}
 }

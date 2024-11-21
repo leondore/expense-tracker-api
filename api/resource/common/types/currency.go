@@ -9,11 +9,7 @@ const (
 	Base Currency = 100
 )
 
-func CurrencyFromString(s string) (Currency, error) {
-	c, err := strconv.ParseUint(s, 10, 64)
-	if err != nil {
-		return 0, err
-	}
-
-	return Currency(c) / Base, nil
+func CurrencyFromString(s string) Currency {
+	c, _ := strconv.ParseUint(s, 10, 64)
+	return Currency(c) / Base
 }
