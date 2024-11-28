@@ -26,7 +26,18 @@ func NewAPI(db *database.Queries) *API {
 //	@success        200 {array}     DTO
 //	@failure        500 {object}    err.Error
 //	@router         /accounts [get]
-func (api *API) List(w http.ResponseWriter, r *http.Request) {}
+func (api *API) List(w http.ResponseWriter, r *http.Request) {
+	accounts, err := api.repository.List(r.Context())
+	if err != nil {
+		// handle error
+	}
+
+	list := make([]DTO, 0, len(accounts))
+	for _, account := range accounts {
+		var dto DTO
+		list = append(list, *dto.FromModel(account))
+	}
+}
 
 // Create godoc
 //
