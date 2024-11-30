@@ -1,8 +1,6 @@
 package account
 
 import (
-	"database/sql"
-
 	"github.com/google/uuid"
 	"github.com/leondore/expense-tracker-api/api/resource/common/types"
 	database "github.com/leondore/expense-tracker-api/database/gen"
@@ -30,7 +28,7 @@ type Form struct {
 	CurrencyID    int       `json:"currency"`
 }
 
-func (d *DTO) FromModel(row database.ListAccountsRow) *DTO {
+func (d *DTO) FromModel(row *database.ListAccountsRow) *DTO {
 	return &DTO{
 		Id:            row.ID,
 		Name:          row.Name,
@@ -44,14 +42,13 @@ func (d *DTO) FromModel(row database.ListAccountsRow) *DTO {
 	}
 }
 
-type CreateAccountParams struct {
-	Name          string         `json:"name"`
-	Description   sql.NullString `json:"description"`
-	AccountNumber sql.NullString `json:"account_number"`
-	CategoryID    int16          `json:"category_id"`
-	InstitutionID sql.NullInt16  `json:"institution_id"`
-	UserID        uuid.UUID      `json:"user_id"`
-	CurrencyID    int16          `json:"currency_id"`
+func ToDTO(rows []database.ListAccountsRow) []*DTO {
+	dtos := make([]*DTO, len(rows))
+	for i, v := range rows {
+		dto := &DTO{}
+		dtos[i] = dto.FromModel(&v)
+	}
+	return dtos
 }
 
 func (f *Form) ToModel() *database.CreateAccountParams {

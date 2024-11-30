@@ -3,6 +3,7 @@ package account
 import (
 	"net/http"
 
+	e "github.com/leondore/expense-tracker-api/api/resource/common/err"
 	database "github.com/leondore/expense-tracker-api/database/gen"
 )
 
@@ -29,14 +30,16 @@ func NewAPI(db *database.Queries) *API {
 func (api *API) List(w http.ResponseWriter, r *http.Request) {
 	accounts, err := api.repository.List(r.Context())
 	if err != nil {
-		// handle error
+		switch err.(type) {
+		case e.ErrUserID:
+			e.BadRequest(w, e.RespInvalidUserID)
+		default:
+			e.ServerError(w, e.RespDBDataAccessFailure)
+		}
+		return
 	}
 
-	list := make([]DTO, 0, len(accounts))
-	for _, account := range accounts {
-		var dto DTO
-		list = append(list, *dto.FromModel(account))
-	}
+	list := ToDTO(accounts)
 }
 
 // Create godoc
